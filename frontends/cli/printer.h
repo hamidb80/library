@@ -20,6 +20,14 @@ T getInput(string promptText = "", bool ignore_rest = true)
   return inp;
 }
 
+string getLine(string promptText = "")
+{
+  cout << promptText;
+  string inp;
+  getline(cin, inp);
+  return inp;
+}
+
 string repeat(char ch, int num)
 {
   string res;
@@ -29,7 +37,12 @@ string repeat(char ch, int num)
   return res;
 }
 
-void printMessage(string header, string text, string color)
+string indent(int num)
+{
+  return repeat(' ', num);
+}
+
+void printMessage(string header, string text, string fore = "bright white")
 {
   // -------- Header -------
   // message
@@ -40,12 +53,10 @@ void printMessage(string header, string text, string color)
     tlen++;
 
   int r = (tlen - header.length()) / 2;
-
   cout << endl
-       << repeat('-', r) << ' ' << header << ' ' << repeat('-', r) << endl
-       << dye::colorize(text, color) << endl
-       << repeat('-', tlen + 2) << endl
-       << endl;
+       << hue::yellow_on_grey << repeat('-', r) << ' ' << header << ' ' << repeat('-', r) << hue::reset << endl
+       << dye::colorize(text, fore) << endl
+       << hue::yellow_on_grey << repeat('-', tlen + 2) << hue::reset << endl;
 }
 void print_err(string err)
 {
@@ -53,7 +64,7 @@ void print_err(string err)
 }
 void print_success(string text)
 {
-  printMessage("", text, "green");
+  printMessage("Info", text, "green");
 }
 
 void print_info(string text)

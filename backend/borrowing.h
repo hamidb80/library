@@ -16,8 +16,8 @@ struct Borrowing
       giveBackDate;
 };
 
-extern vector<Borrowing> borrowingList;
+extern vector<Borrowing*> borrowingList;
 
 void borrow(User *user, Book *book);
 void giveBack(Book *book);
-bool isFree(Book *book);
+Borrowing* getBorrowed(Book *book);
