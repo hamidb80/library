@@ -36,7 +36,11 @@ void login(string userName, string pass)
 
   throw "no such admin with this username";
 }
-void signout()
+
+bool isLoggedIn(){
+  return currentAdmin->name != "";
+}
+void logout()
 {
   currentAdmin = noOne;
 }

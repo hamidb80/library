@@ -12,7 +12,7 @@
 #include "utils.h"
 #include "color.hpp"
 
-using namespace std;
+    using namespace std;
 
 int main()
 {
@@ -22,8 +22,9 @@ int main()
 
   while (true)
   {
+
     cout
-        << "1. " << dye::blue("login/logout") << endl
+        << "1. " << dye::blue(isLoggedIn() ? "logout" : "login") << endl
         << "2. " << dye::red("show/search books") << endl
         << "3. " << dye::purple("book status") << endl
         << "4. " << dye::aqua("borrowing list") << endl
@@ -36,16 +37,27 @@ int main()
     {
     case 1:
     {
-      string
-          uname = getInput<string>("username: "),
-          pass = getInput<string>("password: ");
-
-      try
+      if (isLoggedIn())
       {
-        login(uname, pass);
+        logout();
+        print_info("logged out");
       }
-      catch (char *err)
+
+      else
       {
+        string
+            uname = getInput<string>("username: "),
+            pass = getInput<string>("password: ");
+
+        try
+        {
+          login(uname, pass);
+          print_success("logged in successfully");
+        }
+        catch (const char *err)
+        {
+          print_err(err);
+        }
       }
 
       break;
@@ -53,31 +65,54 @@ int main()
 
     case 2:
     {
-      cout
-          << "1. show" << endl
-          << "2. set sort" << endl
-          << "3. set search" << endl
-          << "4. discard session" << endl;
+      // filters
+      // searchText
+      while (true)
+      {
 
-      int choice = getInput<int>("enter code: ");
-      switch (choice)
-      {
-      case 1:
-      {
-      }
+        cout
+            << "1. show by id" << endl
+            << "2. show" << endl
+            << "3. set sort" << endl
+            << "4. set search name" << endl
+            << "5. set filter" << endl
+            << "6. quit/discard session" << endl;
 
-      case 3:
-      {
-        int bid = getInput<int>("enter book id: ");
-        // TODO enter personal info
-        break;
-      }
+        int choice = getInput<int>("enter code: ");
+        switch (choice)
+        {
+        case 1:
+        {
+          int bid = getInput<int>("enter book id: ");
 
-      default:
-      {
-        // err
-        break;
-      }
+          try
+          {
+            auto book = getBook(bid);
+            print_info(full_info(*book));
+          }
+          catch (const char *err)
+          {
+            print_err(err);
+          }
+
+          break;
+        }
+        case 2:
+        {
+          break;
+        }
+        case 3:
+        {
+          int bid = getInput<int>("enter book id: ");
+          // TODO enter personal info
+          break;
+        }
+
+        default:
+        {
+          break;
+        }
+        }
       }
     }
 
