@@ -64,7 +64,6 @@ const string bookCharacteristics[bookCharacteristicsLen] = {
     "releaseYear",
     "comeInLib"};
 
-void add10Books();
 void addBook(Book *b);
 void deleteBook(Book *book);
 Book *getBook(int id);

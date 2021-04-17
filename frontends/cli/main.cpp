@@ -22,8 +22,6 @@ string stringer(string s)
 
 int main()
 {
-  add10Books();
-
   cout
       << dye::yellow_on_grey("~~~~~~~~~ library [CLI] ~~~~~~~~~") << endl
       << endl;
@@ -297,7 +295,6 @@ int main()
     case 7:
     {
       if(isLoggedIn())
-
       break;
     }
     case 8:
