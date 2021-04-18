@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <ArduinoJson.h>
 
 #include "date.h"
 using namespace std;
@@ -55,14 +56,6 @@ struct BookFilter
 extern vector<Book *> bookList;
 
 const int bookCharacteristicsLen = 7;
-const string bookCharacteristics[bookCharacteristicsLen] = {
-    "name",
-    "id",
-    "category",
-    "authorName",
-    "version",
-    "releaseYear",
-    "comeInLib"};
 
 void addBook(Book *b);
 void deleteBook(Book *book);
@@ -71,3 +64,6 @@ string full_info(Book book);
 string short_info(Book book);
 vector<Book *> sortBy(vector<Book *> bkl, string by, bool asc);
 vector<Book *> filterBy(vector<Book *> bkl, BookFilter bf);
+
+Book *json2Book(JsonObject jo);
+JsonObject to_json(Book *bk);

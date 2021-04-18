@@ -13,7 +13,13 @@ struct Date
   Date() : year(0), month(0), day(0) {}
   Date(string df);
   Date(int y, int m, int d) : year(y), month(m), day(d) {}
+  bool isNone(){
+    return !(year || month || day);
+  }
 };
+
+
+Date getNow();
 
 string to_string(Date d);
 bool compare(Date a, Date b);

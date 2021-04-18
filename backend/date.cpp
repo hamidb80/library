@@ -1,5 +1,6 @@
+#include <ctime>
 #include "date.h"
-#include "../common/str.hpp"
+#include "../utils/str.hpp"
 
 using namespace std;
 
@@ -23,10 +24,20 @@ Date::Date(string s)
     month = stoi(dl[1]);
     day = stoi(dl[2]);
   }
-  catch(...)
+  catch (...)
   {
     throw "invalid number";
   }
+}
+
+Date getNow()
+{
+  time_t t = time(0); // get time now
+  struct tm *now = localtime(&t);
+  return Date(
+      now->tm_year + 1900,
+      now->tm_mon + 1,
+      now->tm_mday);
 }
 
 bool compare(Date a, Date b)

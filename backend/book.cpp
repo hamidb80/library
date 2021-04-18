@@ -6,17 +6,18 @@
 #include "date.h"
 #include "book.h"
 
-#define endl "\n"
+#include "../utils/json.hpp"
 
+#define endl "\n"
 using namespace std;
 
 vector<Book *> bookList = {};
 
-int lastBookId = 0;
+int nextId = 0;
 
 void addBook(Book *b)
 {
-  b->id = lastBookId++;
+  b->id = nextId++;
   bookList.push_back(b);
 }
 void deleteBook(Book *book)
@@ -104,4 +105,32 @@ vector<Book *> filterBy(vector<Book *> bkl, BookFilter bf)
   }
 
   return result;
+}
+
+Book *json2Book(JsonObject jo)
+{
+  auto bookref = new Book(
+      jo["name"],
+      jo["category"],
+      jo["authorName"],
+      jo["releaseYear"],
+      jo["version"],
+      Date(jo["comeInLib"]));
+
+  bookref->id = jo["id"];
+  return bookref;
+}
+JsonObject to_json(Book *bk)
+{
+  JsonObject jo;
+
+  jo["id"] = bk->id;
+  jo["name"] = bk->name;
+  jo["category"] = bk->category;
+  jo["authorName"] = bk->authorName;
+  jo["comeInLib"] = to_string(bk->comeInLib);
+  jo["version"] = bk->version;
+  jo["releaseYear"] = bk->releaseYear;
+
+  return jo;
 }

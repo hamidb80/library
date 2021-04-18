@@ -1,6 +1,8 @@
 #include <string>
 #include <vector>
 #include <functional>
+#include <ArduinoJson.h>
+#include "../utils/json.hpp"
 
 #include "admin.h"
 using namespace std;
@@ -10,6 +12,7 @@ string getHash(string what)
 {
   return to_string(hashFunc(what));
 }
+int nextId = 0;
 
 vector<Admin *> adminList = {
     new Admin("admin", getHash("1234")),
@@ -37,7 +40,8 @@ void login(string userName, string pass)
   throw "no such admin with this username";
 }
 
-bool isLoggedIn(){
+bool isLoggedIn()
+{
   return currentAdmin->name != "";
 }
 void logout()
@@ -59,3 +63,22 @@ void logout()
 //       return;
 //     }
 // }
+
+Admin *json2admin(JsonObject jo)
+{
+  auto adminref = new Admin(
+      jo["name"], jo["hashedPass"]);
+
+  adminref->id = jo["id"];
+  return adminref;
+}
+JsonObject to_json(Admin *admn)
+{
+  JsonObject jo;
+
+  jo["id"] = admn->id;
+  jo["name"] = admn->name;
+  jo["hashedPass"] = admn->hashedPass;
+
+  return jo;
+}

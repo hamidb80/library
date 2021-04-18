@@ -1,8 +1,6 @@
 #include <iostream>
 #include <vector>
 
-// https://github.com/nlohmann/json
-
 #include "../../backend/date.h"
 #include "../../backend/admin.h"
 #include "../../backend/user.h"
@@ -10,6 +8,7 @@
 #include "../../backend/borrowing.h"
 #include "../../backend/sort.h"
 
+#include "../../utils/json.hpp"
 #include "printer.h"
 #include "color.hpp"
 
@@ -28,8 +27,12 @@ int main()
 
   while (true)
   {
+    if (isLoggedIn())
+      cout
+          << "0. " << dye::bright_white("import from json file") << endl;
 
-    cout << "1. " << dye::bright_white_on_blue(isLoggedIn() ? "logout" : "login") << endl;
+    cout
+        << "1. " << dye::bright_white_on_blue(isLoggedIn() ? "logout" : "login") << endl;
 
     if (isLoggedIn())
       cout
@@ -44,11 +47,38 @@ int main()
       cout
           << "7. " << dye::bright_white_on_purple("borrow") << endl
           << "8. " << dye::green_on_grey("give back") << endl
+          << "9. " << dye::black_on_purple("save") << endl
           << endl;
 
     int choice = getInput<int>("enter code: ");
     switch (choice)
     {
+    case 0:
+    {
+      cout
+          << hue::aqua
+          << "the path must have 3 files:" << endl
+          << "  admins.json" << endl
+          << "  books.json" << endl
+          << "  borrowings.json" << endl
+          << hue::reset;
+
+      auto pathToFolder = getInput<string>("\npath to that folder: ");
+      try
+      {
+        // TODO: add / or \  to path
+        auto
+            adminsDoc = loadJsonFromFile(pathToFolder + "admins.json"),
+            booksDoc = loadJsonFromFile(pathToFolder + "books.json"),
+            brwDoc = loadJsonFromFile(pathToFolder + "borrowings.json");
+      }
+      catch (const char *err)
+      {
+        print_err(err);
+      }
+
+      break;
+    }
     case 1:
     {
       if (isLoggedIn())
@@ -194,6 +224,15 @@ int main()
         {
           cout << dye::black_on_aqua("::: sort :::") << endl;
 
+          const string bookCharacteristics[bookCharacteristicsLen] = {
+              "name",
+              "id",
+              "category",
+              "authorName",
+              "version",
+              "releaseYear",
+              "comeInLib"};
+
           for (int i = 0; i < bookCharacteristicsLen; i++)
             cout << indent(4)
                  << i + 1 << ". " << bookCharacteristics[i] << endl;
@@ -270,10 +309,14 @@ int main()
         Book *b = getBook(bid); // chekc ofr exstance of the book
         try
         {
-          auto brw = getBorrowed(b);
+          auto brw = getBorrowingInfo(b);
+
+          if (brw->is_free())
+            throw "";
+
           printMessage(
               "Report",
-              "is borrowd by: " + brw->user->name);
+              "is borrowd by: " + brw->user.name);
         }
         catch (...)
         {
@@ -290,25 +333,76 @@ int main()
 
     case 6:
     {
+      for (int i = 0; i < borrowingList.size(); i++)
+      {
+        auto brw = borrowingList[i];
+        printMessage(
+            "#" + to_string(brw->id),
+            short_info(*brw->book) + "\n" + to_string(brw->user));
+      }
+
       break;
     }
     case 7:
     {
-      if(isLoggedIn())
+      if (isLoggedIn())
+      {
+        int bid = getInput<int>("book id: ");
+        User usr = User(
+            getLine("your name: "),
+            getInput<string>("phone number: "),
+            getInput<string>("national code :"),
+            getInput<string>("email: "));
+
+        try
+        {
+          borrow(usr, getBook(bid));
+        }
+        catch (const char *err)
+        {
+          print_err(err);
+        }
+      }
       break;
     }
     case 8:
     {
-      if(isLoggedIn())
+      if (isLoggedIn())
+      {
+        int bid = getInput<int>("book id: ");
+        try
+        {
+          giveBack(getBook(bid));
+        }
+        catch (const char *err)
+        {
+          print_err(err);
+        }
+      }
+      break;
+    }
+    case 9:
+    {
+      if (isLoggedIn())
+      {
+        auto pathToFolder = getInput<string>("\npath to that folder: ");
 
+        try
+        {
+          // FIXME slash or back \ or / ??
+          saveBooksToJson(pathToFolder + "/books.json");
+          saveBorrowingToJson(pathToFolder + "/borrowing.json");
+          saveAdminsToJson(pathToFolder + "/admins.json");
+        }
+        catch (const char *err)
+        {
+          print_err(err);
+        }
+      }
       break;
     }
     default:
-    {
-
-      // err
       break;
-    }
     }
   }
 }
