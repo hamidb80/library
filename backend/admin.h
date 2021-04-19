@@ -16,6 +16,7 @@ struct Admin
 };
 
 extern vector<Admin *> adminList;
+extern int adminNextId;
 extern Admin *noOne, *currentAdmin;
 
 void login(string userName, string pass);

@@ -8,7 +8,9 @@
 #include "../../backend/borrowing.h"
 #include "../../backend/sort.h"
 
-#include "../../utils/json.hpp"
+#include "../../backend/interaction.hpp"
+
+#include "../../utils/json.h"
 #include "printer.h"
 #include "color.hpp"
 
@@ -67,10 +69,10 @@ int main()
       try
       {
         // TODO: add / or \  to path
-        auto
-            adminsDoc = loadJsonFromFile(pathToFolder + "admins.json"),
-            booksDoc = loadJsonFromFile(pathToFolder + "books.json"),
-            brwDoc = loadJsonFromFile(pathToFolder + "borrowings.json");
+        // auto
+            // adminsDoc = loadJsonFromFile(pathToFolder + "admins.json");
+            // booksDoc = loadJsonFromFile(pathToFolder + "books.json");
+            // brwDoc = loadJsonFromFile(pathToFolder + "borrowings.json");
       }
       catch (const char *err)
       {
@@ -386,13 +388,13 @@ int main()
       if (isLoggedIn())
       {
         auto pathToFolder = getInput<string>("\npath to that folder: ");
+        const string DATABASE_FOLDER = "./database/";
 
         try
         {
-          // FIXME slash or back \ or / ??
-          saveBooksToJson(pathToFolder + "/books.json");
-          saveBorrowingToJson(pathToFolder + "/borrowing.json");
-          saveAdminsToJson(pathToFolder + "/admins.json");
+          saveBooksAsFile(DATABASE_FOLDER + "books.json");
+          saveBorrowingsAsFile(DATABASE_FOLDER + "borrowing.json");
+          saveAdminsAsFile(DATABASE_FOLDER + "admins.json");
         }
         catch (const char *err)
         {

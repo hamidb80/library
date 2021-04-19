@@ -3,12 +3,11 @@
 #include "user.h"
 #include "date.h"
 #include "borrowing.h"
-#include "../utils/json.hpp"
 
 using namespace std;
 
 vector<Borrowing *> borrowingList;
-int currentId = 0;
+int bookNextId = 0;
 
 void addBorrow(int id, User user, Book *book, Date recvd, Date giveBack)
 {
@@ -21,7 +20,7 @@ void borrow(User user, Book *book)
   auto dnow = getNow();
   auto brw = new Borrowing(book, user, dnow);
 
-  brw->id = currentId++;
+  brw->id = bookNextId++;
   borrowingList.push_back(brw);
 }
 void giveBack(Book *book)
@@ -51,12 +50,12 @@ Borrowing *getBorrowingInfo(Book *book)
 Borrowing *json2borrowing(JsonObject jo)
 {
   auto Borrowingref = new Borrowing(
-      getBook(jo["bookId"]),
-      json2user(jo["user"]),
-      Date(jo["recvDate"]),
-      Date(jo["giveBackDate"]));
-
-  Borrowingref->id = jo["id"];
+      getBook(jo["bookId"].as<int>()),
+      json2user(jo["user"].as<JsonObject>()),
+      Date(jo["recvDate"].as<string>()),
+      Date(jo["giveBackDate"].as<string>()));
+  
+  Borrowingref->id = jo["id"].as<int>();
   return Borrowingref;
 }
 JsonObject to_json(Borrowing *brw)

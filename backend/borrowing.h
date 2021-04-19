@@ -37,6 +37,7 @@ struct Borrowing
 };
 
 extern vector<Borrowing *> borrowingList;
+extern int bookNextId;
 
 void addBorrow(int id, User user, Book *book, Date recvd, Date giveBack = Date());
 void borrow(User user, Book *book);

@@ -6,8 +6,6 @@
 #include "date.h"
 #include "book.h"
 
-#include "../utils/json.hpp"
-
 #define endl "\n"
 using namespace std;
 
@@ -110,14 +108,14 @@ vector<Book *> filterBy(vector<Book *> bkl, BookFilter bf)
 Book *json2Book(JsonObject jo)
 {
   auto bookref = new Book(
-      jo["name"],
-      jo["category"],
-      jo["authorName"],
-      jo["releaseYear"],
-      jo["version"],
-      Date(jo["comeInLib"]));
+      jo["name"].as<string>(),
+      jo["category"].as<string>(),
+      jo["authorName"].as<string>(),
+      jo["releaseYear"].as<int>(),
+      jo["version"].as<int>(),
+      Date(jo["comeInLib"].as<string>()));
 
-  bookref->id = jo["id"];
+  bookref->id = jo["id"].as<int>();
   return bookref;
 }
 JsonObject to_json(Book *bk)

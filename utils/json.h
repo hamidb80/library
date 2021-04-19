@@ -1,9 +1,11 @@
+#pragma once
+
 #include <ArduinoJson.h>
-#include "fileio.hpp"
+#include "fileio.h"
 
 using namespace std;
 
-DynamicJsonDocument parseJson(string jsonString)
+static DynamicJsonDocument parseJson(string jsonString)
 {
   DynamicJsonDocument doc(jsonString.length() * 5);
   DeserializationError error = deserializeJson(doc, jsonString);
@@ -14,7 +16,7 @@ DynamicJsonDocument parseJson(string jsonString)
   return doc;
 }
 
-DynamicJsonDocument parseJsonFile(string path)
+static DynamicJsonDocument parseJsonFile(string path)
 {
   return parseJson(readFile(path));
 }

@@ -1,9 +1,10 @@
-#include <iostream>
+#pragma onces
+
 #include <fstream>
+#include <string>
 
 using namespace std;
-
-string readFile(string path)
+static string readFile(string path)
 {
   string res, myLine;
   ifstream myFile_Handler;
@@ -23,7 +24,8 @@ string readFile(string path)
   return res;
 }
 
-void saveFile(string path, string content){
+static void saveFile(string path, string content)
+{
   ofstream ofile;
   ofile.open(path);
 

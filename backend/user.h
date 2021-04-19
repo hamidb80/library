@@ -23,6 +23,30 @@ struct User
                    email(_e) {}
 };
 
-string to_string(User u);
-User json2user(JsonObject jo);
-JsonObject to_json(User usr);
+static string to_string(User u)
+{
+  return (
+      "name:\t" + u.name + "\n" +
+      "phone number:\t" + u.phoneNumber + "\n" +
+      "national code:\t" + u.nationalCode + "\n" +
+      "email:\t" + u.email);
+}
+static User json2user(JsonObject jo)
+{
+  return User(
+      jo["name"],
+      jo["phoneNumber"],
+      jo["nationalCode"],
+      jo["email"]);
+}
+static JsonObject to_json(User usr)
+{
+  JsonObject jo;
+
+  jo["name"] = usr.name;
+  jo["phoneNumber"] = usr.phoneNumber;
+  jo["nationalCode"] = usr.nationalCode;
+  jo["email"] = usr.email;
+
+  return jo;
+}

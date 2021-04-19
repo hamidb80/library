@@ -1,6 +1,8 @@
+#pragma once
+
 #include <ArduinoJson.h>
-#include "fileio.hpp"
-#include "json.hpp"
+#include <vector>
+#include <string>
 
 using namespace std;
 
@@ -11,21 +13,21 @@ struct DataBase
 };
 
 template <typename Type>
-DataBase initDB(vector<Type *> objectList, int nextId)
+static DataBase initDB(vector<Type *> objectList, int nextId)
 {
   JsonArray ja;
 
   for (auto obj : objectList)
     ja.add(to_json(obj));
 
-  Database db;
+  DataBase db;
   db.dataList = ja;
   db.nextId = nextId;
   return db;
 }
 
-template <typename Type>
-void parseDb(DataBase db,
+template <class Type>
+static void parseDb(DataBase db,
              vector<Type *> &dataList, int &nextId,
              Type *(*parseFunc)(JsonObject))
 {
@@ -35,7 +37,7 @@ void parseDb(DataBase db,
   nextId = db.nextId;
 }
 
-DataBase readJsonDB(string path)
+static DataBase readJsonDB(string path)
 {
   auto doc = parseJsonFile(path);
 
@@ -46,7 +48,7 @@ DataBase readJsonDB(string path)
   return db;
 }
 
-void saveDB(string path, DataBase db)
+static void saveDB(string path, DataBase db)
 {
   DynamicJsonDocument doc(db.dataList.memoryUsage() + 20);
   doc["list"] = db.dataList;
