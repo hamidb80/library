@@ -9,3 +9,6 @@
   g++  frontends/cli/*.cpp -I ".\include\"
   ```
 
+## notes:
+1. `save` option is not working for now
+2. don't delete borrowed book [please]
