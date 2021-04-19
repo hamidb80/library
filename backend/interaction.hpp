@@ -19,15 +19,15 @@ using namespace book;
 
 void saveBooksAsFile(string path)
 {
-  // initDB<Book>(vector<Book*>(),3);
+  initDB<Book>(vector<Book*>(),3);
 }
 
 void saveBorrowingsAsFile(string path)
 {
-  // auto db = initDB<Borrowing>(borrowingList, bookNextId);
+  auto db = initDB<Borrowing>(borrowingList, bookNextId);
 }
 
 void saveAdminsAsFile(string path)
 {
-  // auto db = initDB<Admin>(adminList, adminNextId);
+  auto db = initDB<Admin>(adminList, adminNextId);
 }

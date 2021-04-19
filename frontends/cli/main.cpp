@@ -15,8 +15,8 @@
 #include "color.hpp"
 
 using namespace std;
-using namespace admin;
 using namespace book;
+using namespace admin;
 using namespace borrowing;
 
 string stringer(string s)
@@ -34,7 +34,7 @@ int main()
   {
     if (isLoggedIn())
       cout
-          << "0. " << dye::bright_white("import from json file") << endl;
+          << "0. " << dye::black_on_bright_white("import from json file") << endl;
 
     cout
         << "1. " << dye::bright_white_on_blue(isLoggedIn() ? "logout" : "login") << endl;
@@ -71,11 +71,10 @@ int main()
       auto pathToFolder = getInput<string>("\npath to that folder: ");
       try
       {
-        // TODO: add / or \  to path
         // auto
-            // adminsDoc = loadJsonFromFile(pathToFolder + "admins.json");
-            // booksDoc = loadJsonFromFile(pathToFolder + "books.json");
-            // brwDoc = loadJsonFromFile(pathToFolder + "borrowings.json");
+        //     adminsDoc = loadJsonFromFile(pathToFolder + "admins.json");
+        //     booksDoc = loadJsonFromFile(pathToFolder + "books.json");
+        //     brwDoc = loadJsonFromFile(pathToFolder + "borrowings.json");
       }
       catch (const char *err)
       {
