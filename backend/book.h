@@ -60,7 +60,6 @@ struct BookFilter
 namespace book
 {
     vector<Book *> bookList;
-
     int nextId = 0;
 
     void addBook(Book *b)
@@ -116,7 +115,7 @@ namespace book
         else if (by == "category")
             return s2lower(a->category) > s2lower(b->category);
         else if (by == "authorName")
-            return s2lower(a->category) > s2lower(b->category);
+            return s2lower(a->authorName) > s2lower(b->authorName);
         else if (by == "version")
             return a->version > b->version;
         else if (by == "releaseYear")
@@ -168,7 +167,7 @@ namespace book
         bookref->id = jo["id"].as<int>();
         return bookref;
     }
-    JsonObject to_json(Book *bk)
+    JsonObject book2json(Book *bk)
     {
         JsonObject jo;
 

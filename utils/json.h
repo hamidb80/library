@@ -7,7 +7,7 @@ using namespace std;
 
 static DynamicJsonDocument parseJson(string jsonString)
 {
-  DynamicJsonDocument doc(jsonString.length() * 5);
+  DynamicJsonDocument doc(jsonString.length() * 10);
   DeserializationError error = deserializeJson(doc, jsonString);
 
   if (error)

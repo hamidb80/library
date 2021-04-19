@@ -22,11 +22,9 @@ namespace admin
   {
     return to_string(hashFunc(what));
   }
-  int adminNextId = 0;
+  int nextId = 0;
 
-  vector<Admin *> adminList = {
-      new Admin("admin", getHash("1234")),
-  };
+  vector<Admin *> adminList;
 
   Admin *noOne = new Admin("", ""),
         *currentAdmin = noOne;
@@ -83,7 +81,7 @@ namespace admin
     adminref->id = jo["id"].as<int>();
     return adminref;
   }
-  JsonObject to_json(Admin *admn)
+  JsonObject admin2json(Admin *admn)
   {
     JsonObject jo;
 

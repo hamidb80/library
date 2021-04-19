@@ -2,6 +2,7 @@
 
 #include <ArduinoJson.h>
 #include <vector>
+#include <iostream>
 #include <string>
 
 using namespace std;
@@ -13,7 +14,10 @@ struct DataBase
 };
 
 template <typename Type>
-static DataBase initDB(vector<Type *> objectList, int nextId)
+static DataBase initDB(
+    vector<Type *> objectList,
+    JsonObject (*to_json)(Type *),
+    int nextId)
 {
   JsonArray ja;
 
@@ -28,8 +32,8 @@ static DataBase initDB(vector<Type *> objectList, int nextId)
 
 template <class Type>
 static void parseDb(DataBase db,
-             vector<Type *> &dataList, int &nextId,
-             Type *(*parseFunc)(JsonObject))
+                    vector<Type *> &dataList, int &nextId,
+                    Type *(*parseFunc)(JsonObject))
 {
   for (auto obj : db.dataList)
     dataList.push_back(parseFunc(obj));

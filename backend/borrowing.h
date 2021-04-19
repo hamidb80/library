@@ -41,7 +41,7 @@ using namespace std;
 namespace borrowing
 {
   vector<Borrowing *> borrowingList;
-  int bookNextId = 0;
+  int nextId = 0;
 
   void addBorrow(int id, User user, Book *book, Date recvd, Date giveBack)
   {
@@ -54,7 +54,7 @@ namespace borrowing
     auto dnow = getNow();
     auto brw = new Borrowing(book, user, dnow);
 
-    brw->id = bookNextId++;
+    brw->id = nextId++;
     borrowingList.push_back(brw);
   }
   void giveBack(Book *book)
@@ -64,21 +64,34 @@ namespace borrowing
       auto brw = borrowingList[i];
       if (book->id == brw->book->id)
       {
-        brw->giveBackDate = getNow();
-        return;
+        if (brw->giveBackDate.isNone())
+        {
+          brw->giveBackDate = getNow();
+          return;
+        }
+        break;
       }
     }
+    throw "this book is not borrowed";
   }
-  Borrowing *getBorrowingInfo(Book *book)
+  Borrowing *getActiveBorrowingInfo(Book *book)
   {
     for (int i = 0; i < borrowingList.size(); i++)
     {
       auto brw = borrowingList[i];
-      if (book->id == brw->book->id)
+      if (book->id == brw->book->id && !brw->is_free())
         return brw;
     }
 
     throw "this book is not borrowed for now";
+  }
+  string to_string(Borrowing *brw)
+  {
+    return "---book:\n" + short_info(*brw->book) +
+           "\n---is borrowed by:\n" + to_string(brw->user) +
+           "\ngiven in: " + to_string(brw->recvDate) +
+           (brw->giveBackDate.isNone() ? "\nnot returned yet"
+                                       : "\nreturned in: " + to_string(brw->recvDate));
   }
 
   Borrowing *json2borrowing(JsonObject jo)
@@ -92,13 +105,13 @@ namespace borrowing
     Borrowingref->id = jo["id"].as<int>();
     return Borrowingref;
   }
-  JsonObject to_json(Borrowing *brw)
+  JsonObject borrowing2json(Borrowing *brw)
   {
     JsonObject jo;
 
     jo["id"] = brw->id;
     jo["bookId"] = brw->book->id;
-    jo["user"] = to_json(brw->user);
+    jo["user"] = user2json(brw->user);
     jo["recvDate"] = to_string(brw->recvDate);
     jo["giveBackDate"] = to_string(brw->giveBackDate);
 

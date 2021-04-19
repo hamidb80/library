@@ -39,7 +39,7 @@ static User json2user(JsonObject jo)
       jo["nationalCode"],
       jo["email"]);
 }
-static JsonObject to_json(User usr)
+static JsonObject user2json(User usr)
 {
   JsonObject jo;
 

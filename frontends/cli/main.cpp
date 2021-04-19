@@ -24,11 +24,27 @@ string stringer(string s)
   return s == "" ? "not set" : s;
 }
 
+void loadDataBase()
+{
+  importAdminsFromJson("./database/admins.json");
+  importBooksFromJson("./database/books.json");
+  importBorrowingsFromJson("./database/borrowings.json");
+}
+
 int main()
 {
   cout
       << dye::yellow_on_grey("~~~~~~~~~ library [CLI] ~~~~~~~~~") << endl
       << endl;
+
+  try
+  {
+    loadDataBase();
+  }
+  catch (const char *err)
+  {
+    print_err(err);
+  }
 
   while (true)
   {
@@ -66,15 +82,15 @@ int main()
           << "  admins.json" << endl
           << "  books.json" << endl
           << "  borrowings.json" << endl
+          << "default: ./database/" << endl
           << hue::reset;
 
       auto pathToFolder = getInput<string>("\npath to that folder: ");
       try
       {
-        // auto
-        //     adminsDoc = loadJsonFromFile(pathToFolder + "admins.json");
-        //     booksDoc = loadJsonFromFile(pathToFolder + "books.json");
-        //     brwDoc = loadJsonFromFile(pathToFolder + "borrowings.json");
+        importBooksFromJson(pathToFolder + "books.json");
+        importAdminsFromJson(pathToFolder + "admins.json");
+        importBorrowingsFromJson(pathToFolder + "borrowings.json");
       }
       catch (const char *err)
       {
@@ -219,15 +235,15 @@ int main()
 
           else
             for (int i = 0; i < bkl.size(); i++)
-              printMessage("#" + to_string(bkl[i]->id), short_info(*bkl[i]));
+              printMessage("#" + to_string(i + 1), short_info(*bkl[i]));
 
-          cout << endl;
+          print_info(to_string(bkl.size()) + " result(s) found");
           break;
         }
         case 3:
         {
           cout << dye::black_on_aqua("::: sort :::") << endl;
-          const int bookCharacteristicsLen = 7; 
+          const int bookCharacteristicsLen = 7;
           const string bookCharacteristics[bookCharacteristicsLen] = {
               "name",
               "id",
@@ -313,14 +329,12 @@ int main()
         Book *b = getBook(bid); // chekc ofr exstance of the book
         try
         {
-          auto brw = getBorrowingInfo(b);
+          auto brw = getActiveBorrowingInfo(b);
 
           if (brw->is_free())
             throw "";
 
-          printMessage(
-              "Report",
-              "is borrowd by: " + brw->user.name);
+          printMessage("Report", to_string(brw));
         }
         catch (...)
         {
@@ -341,8 +355,7 @@ int main()
       {
         auto brw = borrowingList[i];
         printMessage(
-            "#" + to_string(brw->id),
-            short_info(*brw->book) + "\n" + to_string(brw->user));
+            "#" + to_string(brw->id), to_string(brw));
       }
 
       break;
@@ -373,10 +386,10 @@ int main()
     {
       if (isLoggedIn())
       {
-        int bid = getInput<int>("book id: ");
+        int brid = getInput<int>("book id: ");
         try
         {
-          giveBack(getBook(bid));
+          giveBack(getBook(brid));
         }
         catch (const char *err)
         {
@@ -389,14 +402,14 @@ int main()
     {
       if (isLoggedIn())
       {
-        auto pathToFolder = getInput<string>("\npath to that folder: ");
-        const string DATABASE_FOLDER = "./database/";
+        string pathToFolder = getLine("\npath to that folder: ");
 
         try
         {
-          saveBooksAsFile(DATABASE_FOLDER + "books.json");
-          saveBorrowingsAsFile(DATABASE_FOLDER + "borrowing.json");
-          saveAdminsAsFile(DATABASE_FOLDER + "admins.json");
+          // FIXME: cannot save anything
+          saveBooksAsFile(pathToFolder + "books.json");
+          saveBorrowingsAsFile(pathToFolder + "borrowing.json");
+          saveAdminsAsFile(pathToFolder + "admins.json");
         }
         catch (const char *err)
         {
