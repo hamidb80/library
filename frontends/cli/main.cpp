@@ -15,6 +15,9 @@
 #include "color.hpp"
 
 using namespace std;
+using namespace admin;
+using namespace book;
+using namespace borrowing;
 
 string stringer(string s)
 {
@@ -225,7 +228,7 @@ int main()
         case 3:
         {
           cout << dye::black_on_aqua("::: sort :::") << endl;
-
+          const int bookCharacteristicsLen = 7; 
           const string bookCharacteristics[bookCharacteristicsLen] = {
               "name",
               "id",

@@ -1,10 +1,11 @@
-#pragma onces
+#pragma once
 
 #include <string>
 #include <vector>
-using namespace std;
+#include <locale>
 
-vector<string> split(string s, char d)
+using namespace std;
+static vector<string> split(string s, char d)
 {
   vector<string> res;
   int
@@ -15,11 +16,18 @@ vector<string> split(string s, char d)
     if (s[i] == d)
     {
       res.push_back(s.substr(start, i - start));
-      start = i+1;
+      start = i + 1;
     }
 
   if (start != i)
     res.push_back(s.substr(start, i - start));
 
   return res;
+}
+
+static string s2lower(string s)
+{
+  for (char &c : s)
+    c = tolower(c);
+  return s;
 }

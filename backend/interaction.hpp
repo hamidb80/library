@@ -10,11 +10,16 @@
 #include "borrowing.h"
 #include "admin.h"
 
+
+
 using namespace std;
+using namespace admin;
+using namespace borrowing;
+using namespace book;
 
 void saveBooksAsFile(string path)
 {
-  initDB<Book>(vector<Book*>(),3);
+  // initDB<Book>(vector<Book*>(),3);
 }
 
 void saveBorrowingsAsFile(string path)
